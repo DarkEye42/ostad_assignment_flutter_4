@@ -30,8 +30,6 @@ class HomeScreenState extends State<HomeScreen> {
           'Product List',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.blueAccent,
-        foregroundColor: Colors.white,
       ),
       body: RefreshIndicator(
         onRefresh: _getProductList,
@@ -50,13 +48,16 @@ class HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const AddProduct(),
             ),
-          ),
+          );
+          if (result == true) {
+            _getProductList();
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -137,9 +138,15 @@ class HomeScreenState extends State<HomeScreen> {
       }
       _getProductListInProgress = false;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Something went wrong...')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.redAccent,
+        content: Text(
+          'Something went wrong...',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ));
     }
 
     setState(() {});
@@ -158,11 +165,30 @@ class HomeScreenState extends State<HomeScreen> {
 
     if (response.statusCode == 200) {
       _getProductList();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(
+            'Product has been successfully deleted!',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
       _getProductListInProgress = false;
     } else {
       _getProductListInProgress = false;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Product deleting failed! Try again.')),
+        const SnackBar(
+          backgroundColor: Colors.redAccent,
+          content: Text(
+            'Product deleting failed! Try again.',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
       );
     }
 

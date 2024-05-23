@@ -40,8 +40,6 @@ class _UpdateProductState extends State<UpdateProduct> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Update Product'),
-        backgroundColor: Colors.blueAccent,
-        foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Padding(
